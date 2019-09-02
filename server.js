@@ -6,6 +6,7 @@ const server = express();
 
 server.use(express.json());
 
+// Get all projects
 server.get('/api/projects', (req, res) => {
     db('projects')
     .then(projects => {
@@ -16,6 +17,8 @@ server.get('/api/projects', (req, res) => {
     })
 })
 
+
+// Get a project by its id
 server.get('/api/projects/:id', (req, res) => {
     const { id } = req.params;
     db('projects').where({ id })
@@ -31,6 +34,7 @@ server.get('/api/projects/:id', (req, res) => {
       });
 })
 
+// Get a projects tasks
 server.get('/api/projects/:id/tasks', (req, res) => {
     const  project_id  = req.params.id;
 
@@ -50,6 +54,7 @@ server.get('/api/projects/:id/tasks', (req, res) => {
       });
 })
 
+// get a projects related resources
 server.get('/api/projects/:id/resources', (req, res) => {
     const  project_id  = req.params.id;
 
@@ -69,6 +74,7 @@ server.get('/api/projects/:id/resources', (req, res) => {
       });
 })
 
+// Create a new project
 server.post('/api/projects', (req, res) => {
     const projectData = req.body;
 
@@ -81,19 +87,7 @@ server.post('/api/projects', (req, res) => {
       });
 })
 
-server.post('/api/projects/:id', (req, res) => {
-    const project_id  = req.params.id;
-    const taskData = req.body;
-
-    db('tasks').insert({...taskData, project_id})
-    .then(taskId => {
-        res.status(201).json('Created task with id: ' + taskId);
-      })
-      .catch (err => {
-        res.status(500).json({ message: 'Failed to create new task' });
-      });
-})
-
+// Create a new project task
 server.post('/api/projects/:id/tasks', (req, res) => {
     const project_id  = req.params.id;
     const taskData = req.body;
@@ -107,18 +101,18 @@ server.post('/api/projects/:id/tasks', (req, res) => {
       });
 })
 
+// Create a new project resource
 server.post('/api/projects/:id/resources', (req, res) => {
-    const project_id  = req.params.id;
-    const resourceData = req.body;
+  const project_id  = req.params.id;
+  const resourceData = req.body;
 
-    db('resources').insert({...resourceData, project_id})
-    .then(resourceId => {
-        res.status(201).json('Created resource with id: ' + resourceId);
-      })
-      .catch (err => {
-        res.status(500).json({ message: 'Failed to create new resource' });
-      });
+  db('resources').insert({...resourceData, project_id})
+  .then(resourceId => {
+      res.status(201).json('Created resource with id: ' + resourceId);
+    })
+    .catch (err => {
+      res.status(500).json({ message: 'Failed to create new resource' });
+    });
 })
-
 
 module.exports = server;

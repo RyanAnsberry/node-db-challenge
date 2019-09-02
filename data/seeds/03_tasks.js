@@ -1,7 +1,7 @@
 
 exports.seed = function(knex, Promise) {
-  return knex('tasks').del()
-    .then(function () {
+  // return knex('tasks').del()
+    // .then(function () {
       return knex('tasks').insert([
         { id: 1, description: 'Create db schema.', notes: 'Use readme for data shape.', project_id: 1 },
         { id: 2, description: 'Migrate and seed table data.', notes: 'Using knex.', project_id: 1 },
@@ -11,5 +11,5 @@ exports.seed = function(knex, Promise) {
         { id: 6, description: 'Balance checkbook', project_id: 3 },
         { id: 7, description: 'Reduce debt.', notes: 'Spend less than you earn.', project_id: 3 }
       ]);
-    });
+    // });
 };

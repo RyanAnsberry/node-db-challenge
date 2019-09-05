@@ -10,6 +10,13 @@ server.use(express.json());
 server.get('/api/projects', (req, res) => {
     db('projects')
     .then(projects => {
+      projects.forEach(project => {
+        if (project.completed) {
+          project.completed = true
+        } else {
+          project.completed = false
+        }
+      })
         res.status(200).json(projects);
     })
     .catch(error => {
@@ -21,9 +28,14 @@ server.get('/api/projects', (req, res) => {
 // Get a project by its id
 server.get('/api/projects/:id', (req, res) => {
     const { id } = req.params;
-    db('projects').where({ id })
+    db('projects').where({ id }).first()
     .then(project => {
         if (project) {
+            if (project.completed) {
+              project.completed = true
+            } else {
+              project.completed = false
+            }
           res.json(project);
         } else {
           res.status(404).json({ message: 'Could not find project with given id.' })
@@ -44,6 +56,13 @@ server.get('/api/projects/:id/tasks', (req, res) => {
     .where({ project_id })
     .then(tasks => {
         if (tasks.length) {
+          tasks.forEach(task => {
+            if (task.completed) {
+              task.completed = true
+            } else {
+              task.completed = false
+            }
+          })
           res.json(tasks);
         } else {
           res.status(404).json({ message: 'Could not find tasks for given project.' })
